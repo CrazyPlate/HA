@@ -29,6 +29,7 @@ tts/
 image/
 log/
 www/comunity/
+.ssh
 
 # Uncomment this if you don' want to include secrets.yaml 
 secrets.yaml
