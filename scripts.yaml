@@ -1,0 +1,35 @@
+mediaplayer_radio:
+  alias: mediaplayer_radio
+  sequence:
+  - service: media_player.volume_set
+    data:
+      volume_level: '{{ states(''input_number.mediaplayer_volume'') | float }}'
+    target:
+      entity_id: media_player.chromecast
+  - service: media_player.play_media
+    data:
+      media_content_id: '{% if is_state("input_select.mediaplayer_source", "Antyradio")
+        %} http://94.23.89.48:7300/listen.pls {% elif is_state("input_select.mediaplayer_source",
+        "Radio Zet") %} http://radiozetmp3-01.eurozet.pl:8400 {% elif is_state("input_select.mediaplayer_source",
+        "Złote Przeboje") %} http://wroclaw.radio.pionier.net.pl:8000/pl/zloteprzeboje.ogg
+        {% elif is_state("input_select.mediaplayer_source", "Radio PLUS") %} http://plus-warszawa-01.eurozet.pl:8500/listen.pls
+        {% elif is_state("input_select.mediaplayer_source", "RMF FM") %} http://www.rmfon.pl/n/rmffm.pls
+        {% endif %}
+
+        '
+      media_content_type: music
+      extra:
+        title: '{{states(''input_select.mediaplayer_source'')}}'
+        thumb: '{% if is_state("input_select.mediaplayer_source", "Antyradio") %}
+          /local/images/radio/antyradio.png {% elif is_state("input_select.mediaplayer_zrodlo",
+          "Radio ZET") %} /local/images/radio/radio_zet.png {% elif is_state("input_select.mediaplayer_zrodlo",
+          "Złote Przeboje") %} /local/images/radio/zlote_przeboje.png {% elif is_state("input_select.mediaplayer_zrodlo",
+          "Radio PLUS") %} https://myradioonline.pl/public/uploads/radio_img/radio-plus/fb_cover.jpg
+          {% elif is_state("input_select.mediaplayer_zrodlo", "RMF FM") %} /local/images/radio/rmf_fm.png
+          {% endif %}
+
+          '
+    target:
+      entity_id: media_player.chromecast
+    enabled: true
+  mode: restart

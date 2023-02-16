@@ -1,0 +1,65 @@
+#- platform: burze_dzis_net
+#  api_key: fb347e65d30cd157e891db4b5681e15bd46898f6
+#  warnings:
+#    - frost_warning
+#    - heat_warning
+#    - wind_warning
+#    - precipitation_warning
+#    - storm_warning
+#    - tornado_warning
+#  storms_nearby:
+#    radius: 30
+
+- platform: ping
+  host: 192.168.99.101
+  name: "raspberry_Pi_3B+_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.108
+  name: "arduino_1_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.109
+  name: "node_mcu_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.110
+  name: "wemos_1_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.111
+  name: "gosund_SP111_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.112
+  name: "wemos_2_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.113
+  name: "SmartBulb_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.99.114
+  name: "HamaBulb_ping"
+  count: 2
+  scan_interval: 300
+
+- platform: ping
+  host: 192.168.0.192
+  name: "chromecast"
+  count: 2
+  scan_interval: 300

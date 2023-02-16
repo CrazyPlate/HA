@@ -1,0 +1,154 @@
+- id: '1672160344604'
+  alias: Poziom wody w nawilżaczu
+  description: ''
+  trigger:
+  - type: value
+    platform: device
+    device_id: e1ef00e9164ccff50457340826799ad1
+    entity_id: sensor.nawilzacz_water_level
+    domain: sensor
+    below: 30
+  condition:
+  - condition: device
+    type: is_on
+    device_id: e1ef00e9164ccff50457340826799ad1
+    entity_id: humidifier.nawilzacz
+    domain: humidifier
+  action:
+  - service: notify.mobile_app_huawei_p30
+    data:
+      message: Poziom wody w nawilżaczu poniżej 30%
+  mode: single
+- id: '1672260942116'
+  alias: Włącz światło gdy Chromecast odtwarza
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 3424661b6b76897968031ebbdc8d5925
+    domain: media_player
+    entity_id: media_player.chromecast
+    type: playing
+  condition:
+  - condition: sun
+    before: sunrise
+    after: sunset
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      device_id: 640c89450d2b99cb55cff282834c8622
+  mode: single
+- id: '1672688076515'
+  alias: Kuchnia
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: 933d5895592983cba1d4a9d51b21d80e
+    entity_id: switch.kitchen_switch
+    domain: switch
+    id: Lamp_on
+  - platform: device
+    type: turned_off
+    device_id: 933d5895592983cba1d4a9d51b21d80e
+    entity_id: switch.kitchen_switch
+    domain: switch
+    id: Lamp_off
+  condition:
+  - condition: sun
+    after: sunset
+    before: sunrise
+  action:
+  - if:
+    - condition: trigger
+      id: Lamp_on
+    then:
+    - type: turn_on
+      device_id: 0ab0ac4a2d27944859993f1c40a7898e
+      entity_id: switch.kitchen_led
+      domain: switch
+  - if:
+    - condition: trigger
+      id: Lamp_off
+    then:
+    - type: turn_off
+      device_id: 0ab0ac4a2d27944859993f1c40a7898e
+      entity_id: switch.kitchen_led
+      domain: switch
+  mode: single
+- id: '1673346492525'
+  alias: Ledy kuchnia
+  description: ''
+  trigger:
+  - device_id: c4d569b34b0944f7bb7b06f7526b1022
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: toggle
+    device_id: eb5af370d4b20eedb6f69c71b824165c
+    entity_id: light.kitchen_switch_sonoffmini_light
+    domain: light
+  mode: single
+- id: '1675966608707'
+  alias: IKEA E1812 TRÅDFRI
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 5a10607193937ab0284a9ea29662f10f
+    type: action
+    subtype: 'on'
+    discovery_id: 0x94deb8fffe59ccfc action_on
+    id: 'ON'
+  - platform: device
+    domain: mqtt
+    device_id: 5a10607193937ab0284a9ea29662f10f
+    type: action
+    subtype: 'off'
+    discovery_id: 0x94deb8fffe59ccfc action_off
+    id: DOUBLE_CLICK
+  - platform: device
+    domain: mqtt
+    device_id: 5a10607193937ab0284a9ea29662f10f
+    type: action
+    subtype: brightness_move_up
+    discovery_id: 0x94deb8fffe59ccfc action_brightness_move_up
+    id: BRIGHTNESS_MOVE_UP
+  - platform: device
+    domain: mqtt
+    device_id: 5a10607193937ab0284a9ea29662f10f
+    type: action
+    subtype: brightness_stop
+    discovery_id: 0x94deb8fffe59ccfc action_brightness_stop
+    id: BRIGHTNESS_STOP
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: 'ON'
+      sequence:
+      - type: toggle
+        device_id: a8697356a24fef0ddc2dc20501afb748
+        entity_id: light.bedroom_rgb
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: DOUBLE_CLICK
+      sequence:
+      - type: toggle
+        device_id: 347b2d8a82b74746b8b192ed65e7e7cb
+        entity_id: light.gosundsp111_relay
+        domain: light
+    - conditions:
+      - condition: trigger
+        id: BRIGHTNESS_MOVE_UP
+      sequence:
+      - type: toggle
+        device_id: e1ef00e9164ccff50457340826799ad1
+        entity_id: humidifier.nawilzacz
+        domain: humidifier
+  mode: single

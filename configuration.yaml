@@ -1,0 +1,160 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Example configuration.yaml entry
+my:
+
+homeassistant:
+  customize: !include customize.yaml
+  media_dirs:
+    media: /media
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+
+tts:
+  - platform: google_translate
+    cache: true
+    time_memory: 300
+    base_url: https://crazyplate.duckdns.org:8123
+    service_name: google_say
+
+spotcast:
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
+  country: SE #optional, added in 3.6.24
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+
+frontend:
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+
+
+#frontend: !include themes.yaml
+#template: !include sidebar.yaml
+#
+#lovelace:
+#  mode: yaml
+#  resources:
+#    - url: /hacsfiles/button-card/button-card.js
+#      type: module
+#    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+#      type: module
+#    - url: https://cdn.jsdelivr.net/gh/bramkragten/custom-ui@master/swipe-card/swipe-card.js #/hacsfiles/swipe-card/swipe-card.js
+#      type: module
+
+#recorder:
+#  purge_keep_days: 30
+#  purge_interval: 1
+#  db_url: !secret mariaDB_Connect_URL
+recorder:
+  db_url: mysql://hassioUser:4GAuto42!@core-mariadb/homeassistant?charset=utf8mb4
+
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: !secret influxDB_DBname
+  username: !secret influxDB_User
+  password: !secret influxDB_Password
+  max_retries: 3
+  default_measurement: state
+
+# browser_mod:
+# lovelace:
+#   mode: storage
+#   # Add yaml dashboards
+#   dashboards:
+#     lovelace-yaml:
+#       mode: yaml
+#       title: UI-LOVELACE
+#       icon: mdi:tablet-dashboard
+#       show_in_sidebar: true
+#       filename: /config/www/lovelace/ui-lovelace.yaml
+
+#mqtt:
+#  discovery: true
+#  discovery_prefix: homeassistant
+#  broker: 192.168.99.10
+#  port: 1883
+#  client_id: home-assistant-1
+#  keepalive: 60
+#  username: !secret mqtt_User
+#  password: !secret mqtt_Password
+
+#alarm_control_panel:
+#  - platform: manual
+#    name: Home Alarm
+#    code: "1234"
+#    arming_time: 5
+#    delay_time: 5     
+#    trigger_time: 1
+#    disarmed:
+#      trigger_time: 0
+#    armed_home:
+#      arming_time: 0
+#      delay_time: 0
+
+google_assistant:
+  project_id: ha-c5f6f
+  service_account: !include ha_service_account.json
+  report_state: true
+  exposed_domains:
+    - light
+    - humidifier
+  entity_config:
+    sensor.temperatura_salon:
+      expose: true
+    sensor.bathroom_sensor_temperature:
+      expose: true
+    sensor.nawilzacz_temperature:
+      expose: true
+    sensor.bathroom_sensor_humidity:
+      expose: true
+    sensor.nawilzacz_humidity:
+      expose: true
+    light.zarowka_2:
+      expose: false
+    
+
+# Volumio
+#media_player:
+#  - platform: mpd
+#    name: volumio_mpd
+#    host: 192.168.99.101
+
+mqtt:
+  sensor:
+    - name: "Mikrotik01_Model"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.model }}"
+    - name: "Mikrotik01_SN"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.sn }}"
+    - name: "Mikrotik01_RouterOS_Version"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.ros }}"
+    - name: "Mikrotik01_CPU"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.cpu }}"
+      unit_of_measurement: "%"
+    - name: "Mikrotik01_UsedMemory"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.umem }}"
+    - name: "Mikrotik01_FreeMemory"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.fmem }}"
+    - name: "Mikrotik01_Uptime"
+      state_topic: "Mikrotik01"
+      value_template: "{{ value_json.uptime }}"
+
+powercalc:

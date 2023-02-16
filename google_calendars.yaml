@@ -1,0 +1,47 @@
+
+- cal_id: pl.polish#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: swieta_w_polsce
+    ignore_availability: true
+    name: "\u015Awi\u0119ta w Polsce"
+    track: true
+
+- cal_id: addressbook#contacts@group.v.calendar.google.com
+  entities:
+  - device_id: urodziny
+    ignore_availability: true
+    name: Urodziny
+    track: true
+
+- cal_id: family03624174824626092284@group.calendar.google.com
+  entities:
+  - device_id: familijne
+    ignore_availability: true
+    name: Familijne
+    track: true
+
+- cal_id: tomektelesz@gmail.com
+  entities:
+  - device_id: tomektelesz_gmail_com
+    ignore_availability: true
+    name: tomektelesz@gmail.com
+    track: true
+
+- cal_id: 2opui2b1bk7n7q0l9plk5j3sp4@group.calendar.google.com
+  entities:
+  - device_id: sala_konferencyjna
+    ignore_availability: true
+    name: Sala Konferencyjna
+    track: true
+
+- cal_id: 58cec552adf5787510d9ed7dec4f14a8a6655f009720c1e57190e0097203025b@group.calendar.google.com
+  entities:
+  - device_id: sala_konferencyjna_mala
+    ignore_availability: true
+    name: "Sala konferencyjna Ma\u0142a"
+
+- cal_id: 22361621a9e014c024cf41d3512474585c4d57461f595f10aaed0ac5a70d9f6d@group.calendar.google.com
+  entities:
+  - device_id: dyzur_serwisowy
+    ignore_availability: true
+    name: "Dy\u017Cur Serwisowy"

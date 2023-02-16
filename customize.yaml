@@ -1,0 +1,8 @@
+sensor.tomek_do_domu:
+  friendly_name: Tomek do domu
+sensor.gosundsp111_energy:
+  state_class: measurement
+  device_class: energy
+  last_reset: '"1970-01-01T00:00:00+00:00"'
+sensor.p30pro_wifi_frequency:
+  unit_of_measurement: MHz

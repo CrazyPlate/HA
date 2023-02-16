@@ -1,0 +1,92 @@
+- sensor:
+    - unique_id: sidebar
+      state: template
+      attributes:
+        time: >
+          {% set hours = now().strftime('%H') %}
+          {% set minutes = now().strftime('%M') %}
+          <span class="time">
+            {{ hours }}<span class="time-colon">:</span>{{ minutes }}
+          </span>
+        date: >
+          <font color='#6a7377'><b>
+          {% set days = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'] %}
+          {% set months = ['Stycznia', 'Lutego', 'Marca', 'Kwietnia', 'Maj', 'Czerwca',
+          'Lipca', 'Sierpnia', 'Września', 'Października', 'Listopada', 'Grudnia'] %}
+            {{ days[now().weekday()] }}<br>
+            {{ now().day }} {{ months[now().month-1] }}
+          </b></font>
+        greet: >
+          <b>
+          {% set time = now().hour %}
+          {% if time <= 1 %} Cześć {{'\U0001F611'}}
+          {% elif time <= 3 %} Cześć {{'\U0001F62A'}}
+          {% elif time <= 5 %} Cześć {{'\U0001F634'}}
+          {% elif time <= 7 %} Cześć {{'\U0001F4A9'}}
+          {% elif time <= 9 %} Cześć {{'\u2615\uFE0F'}}
+          {% elif time <= 10 %} Cześć {{'\U0001F642'}}
+          {% elif time <= 13 %} Cześć {{'\U0001F60A'}}
+          {% elif time <= 15 %} Cześć {{'\U0001F60E'}}
+          {% elif time <= 17 %} Cześć {{'\U0001F44B\U0001F3FB'}}
+          {% elif time <= 19 %} Cześć {{'\U0001F44B\U0001F3FB'}}
+          {% elif time <= 22 %} Cześć {{'\U0001F60C'}}
+          {% elif time <= 23 %} Cześć {{'\U0001F974'}}å
+          {% else %} Cześć {{'\U0001F974'}}
+          {% endif %}
+          </b>
+        active: >
+          <b>
+          {% set lights = [
+            states.light.bedroom_light_rgb,
+            states.light.gosundsp111_relay,
+            states.light.kitchen_light_switch,
+            states.light.lazienka_light_rgb,
+            states.light.salon_light_rgb
+          ] %}
+
+          {% set devices = [
+            states.switch.gosundsp111_relay,
+            states.switch.kitchen_light_switch
+          ] %}
+
+          {% set lights_on = lights | selectattr('state','eq','on') | list %}
+          {% set lights_name = lights | selectattr('state','eq','on') | map(attribute='name') | join(', ') %}
+
+          {% set devices_on = devices | selectattr('state','search','(on|cool|fan_only|playing)') | list %}
+          {% set devices_name = devices_on | map(attribute='name') | join(', ') %}
+
+          {% if (lights_on | length == 0) and (devices_on | length > 0) %}
+            {{ devices_name | regex_replace(',([^,]*)$',' i\\1') }} jest włączony
+
+          {% elif (lights_on | length == 1) and (devices_on | length == 1) %}
+            {{ lights_name }} i {{devices_name }} jest włączony
+
+          {% elif (lights_on | length == 1) and (devices_on | length > 1) %}
+            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' i\\1') }} jest włączony
+
+          {% elif (lights_on | length > 1) and (devices_on | length == 1) %}
+            {{ lights_on | length }} oświetlenie i {{ devices_name }} jest włączone
+
+          {% elif (lights_on | length > 1) and (devices_on | length > 1) %}
+            {{ lights_on | length }} oświetlenie, {{ devices_name | regex_replace(',([^,]*)$',' i\\1') }} jest włączone
+
+          {% elif (lights_on | length == 1) and (devices_on | length == 0) %}
+            {{ lights_name }} jest włączony
+
+          {% elif (lights_on | length > 1) and (devices_on | length == 0) %}
+            {{ lights_on | length }} oświetlenie jest włączone
+
+          {% else %}
+            <font color='#6a7377'>Wszystko jest wyłączone</font>
+          {% endif %}
+          </b>
+        weather: >
+          {% set entity = 'weather.dom' %}
+          {% if not is_state(entity, 'unknown') %}
+            {% set temp = state_attr(entity, 'temperature') | round %}
+            {% set precip = state_attr(entity, 'forecast')[0]['precipitation'] | round %}
+              Temperatura {{ temp }}°C, {{ 'brak opadów' if precip == 0
+              else precip | string + 'mm deszczu \u2614\uFE0F' }}
+          {% else %}
+            Nie można załadować pogody...
+          {% endif %}
